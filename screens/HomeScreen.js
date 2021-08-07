@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
 import CustomListItem from '../components/CustomListItem';
 import { auth } from '../firebase';
-import { AntDesign, SimpleLineIcons} from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
                     width: 80,
                 }}>
                     <TouchableOpacity activeOpacity={0.5}>
-                        <SimpleLineIcons name="pencil" size={24} color="black" />
+                        <SimpleLineIcons onPress={() => navigation.navigate("AddChat")} name="pencil" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
             )

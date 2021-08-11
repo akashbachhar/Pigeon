@@ -1,18 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
 import CustomListItem from '../components/CustomListItem';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
+
+    const [chats, setChats] = useState([]);
 
     const signOutUser = () => {
         auth.signOut().then(() => {
             navigation.replace("Login");
         });
-    }
+    };
+
+    useEffect(() => {
+        const unsubscribe = db.collection('chats').onSnapshot(snapshot => (
+            setChats(snapshot.docs.map(doc => ({
+                id : doc.id,
+                data : doc.data()
+            })))
+        ))
+        return unsubscribe;
+    },[])
 
 
     useLayoutEffect(() => {
@@ -46,11 +58,13 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView>
             <ScrollView>
                 <StatusBar style="light" />
-                <CustomListItem />
+                {chats.map(({id, data:{chatName} }) => (
+                    <CustomListItem key={id} id={id} chatName={chatName} />
+                ))} 
             </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default HomeScreen
 
